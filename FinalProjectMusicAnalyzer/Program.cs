@@ -30,7 +30,7 @@ namespace FinalProjectMusicAnalyzer
             AmountOfPlays = plays;
         }
 
-        public override string ToString()
+        override public string ToString()
         {
             return String.Format("Name: {0}, Artist: {1}, Album: {2}, Genre: {3}, Size: {4}, Time: {5}, Year: {6}, Plays: {7}", NameOfSong, ArtistOfSong, SongAlbum, GenreOfSong, Size, Time, Year, AmountOfPlays);
         }
@@ -42,7 +42,7 @@ namespace FinalProjectMusicAnalyzer
         {
             string songReport = null;
 
-            int i = 0;
+            int i;
 
             List<InfoSongsPlaylist> RowColumns = new List<InfoSongsPlaylist>();
 
@@ -65,7 +65,7 @@ namespace FinalProjectMusicAnalyzer
                             if (strings.Length < 8)
                             {
                                 Console.Write("Record does not have the correct number of elements\n");
-                                Console.Write("$Row {index} Contains {strings.Length} values. There should be 8 in that row.\n");
+                                Console.WriteLine($"Row {i} Contains {strings.Length} values. There should be 8 in that row.\n");
                                 break;
                             }
                             else
@@ -169,7 +169,7 @@ namespace FinalProjectMusicAnalyzer
 
             catch (Exception e)
             {
-                Console.WriteLine("Report fiile can't be opened/written");
+                Console.WriteLine("Report file can't be opened/written");
             }
 
             Console.ReadLine();
