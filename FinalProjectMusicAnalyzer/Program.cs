@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FinalProjectMusicAnalyzer
 {
-    public class InfoSongsPlaylist
+    public class Song
     {
         public string NameOfSong;
         public string ArtistOfSong;
@@ -18,7 +18,7 @@ namespace FinalProjectMusicAnalyzer
         public int Year;
         public int AmountOfPlays;
 
-        public InfoSongsPlaylist(string name, string artist, string album, string genre, int size, int time, int year, int plays)
+        public Song(string name, string artist, string album, string genre, int size, int time, int year, int plays)
         {
             NameOfSong = name;
             ArtistOfSong = artist;
@@ -40,17 +40,17 @@ namespace FinalProjectMusicAnalyzer
     {
         static void Main(string[] args)
         {
-            string songReport = null;
+            string report = "";
 
             int i;
 
-            List<InfoSongsPlaylist> RowColumns = new List<InfoSongsPlaylist>();
+            List<Song> RowColumns = new List<Song>();
 
             try
             {
-                if (File.Exists($"SampleMusicPlaylist.txt"))
+                if (File.Exists(args[0]))
                 {
-                    StreamReader sr = new StreamReader($"SampleMusicPlaylist.txt");
+                    StreamReader sr = new StreamReader(args[0]);
                     i = 0;
 
                     string line = sr.ReadLine();
@@ -70,7 +70,7 @@ namespace FinalProjectMusicAnalyzer
                             }
                             else
                             {
-                                InfoSongsPlaylist dataTemp = new InfoSongsPlaylist((strings[0]), (strings[1]), (strings[2]),
+                                Song dataTemp = new Song((strings[0]), (strings[1]), (strings[2]),
                                 (strings[3]), Int32.Parse(strings[4]), Int32.Parse(strings[5]), Int32.Parse(strings[6]),
                                 Int32.Parse(strings[7]));
                                 RowColumns.Add(dataTemp);
@@ -91,6 +91,7 @@ namespace FinalProjectMusicAnalyzer
                 }
             }
 
+
             catch (Exception e)
             {
                 Console.WriteLine("Unable to open the playlist data file...");
@@ -98,69 +99,69 @@ namespace FinalProjectMusicAnalyzer
 
             try
             {
-                InfoSongsPlaylist[] songs = RowColumns.ToArray();
-                using (StreamWriter write = new StreamWriter("SampleMusicPlaylist.txt"))
+                Song[] songs = RowColumns.ToArray();
+                using (StreamWriter write = new StreamWriter("ReportMusic.txt"))
                 {
                     write.WriteLine("Report of this Music Analyst\n");
 
                     var SongsPlayed200Above = from song in songs where song.AmountOfPlays >= 200 select song;
-                    songReport += "\nHere is the list of the songs that have been played at 200 times and above: \n";
+                    report += "\nHere is the list of the songs that have been played at 200 times and above: \n";
 
                     if (SongsPlayed200Above.Count() > 0)
                     {
-                        songReport += SongsPlayed200Above.Count();
+                        report += SongsPlayed200Above.Count();
                     }
                     else
                     {
-                        songReport += "No information found.";
+                        report += "No information found.";
                     }
 
 
                     var SongsWithGenreAlternative = from song in songs where song.GenreOfSong == "Alternative" select song;
                     i = 0;
 
-                    foreach (InfoSongsPlaylist song in SongsWithGenreAlternative)
+                    foreach (Song song in SongsWithGenreAlternative)
                     {
                         i++;
                     }
 
-                    songReport += "\nHere is the list of songs that are in the 'Alternative' genre: {i}\n \n";
+                    report += $"\nHere is the list of songs that are in the 'Alternative' genre: {i}\n \n";
 
                     var SongsWithGenreHipHopRap = from song in songs where song.GenreOfSong == "Hip-Hop/Rap" select song;
                     i = 0;
-                    foreach (InfoSongsPlaylist song in SongsWithGenreHipHopRap)
+                    foreach (Song song in SongsWithGenreHipHopRap)
                     {
                         i++;
                     }
 
-                    songReport += $"Here's the information on how many songs are in the Hip-Hop/Rap genre: {i}\n";
+                    report += $"Here's the information on how many songs are in the Hip-Hop/Rap genre: {i}\n";
 
                     var SongsWithFishbowlAlbum = from song in songs where song.SongAlbum == "Welcome to the Fishbowl" select song;
-                    songReport += "Here are the songs that are under the Welcome to the Fishbowl Album: \n";
-                    foreach (InfoSongsPlaylist songsPlaylist in SongsWithFishbowlAlbum)
+                    report += "Here are the songs that are under the Welcome to the Fishbowl Album: \n";
+                    foreach (Song songsPlaylist in SongsWithFishbowlAlbum)
                     {
-                        songReport += songsPlaylist + "\n";
+                        report += songsPlaylist + "\n";
                     }
 
                     var SongsIn1970 = from song in songs where song.Year < 1970 select song;
-                    songReport += "\nHere are the songs from earlier than 1970: \n \n";
-                    foreach (InfoSongsPlaylist songsPlaylist in SongsIn1970)
+                    report += "\nHere are the songs from earlier than 1970: \n \n";
+                    foreach (Song songsPlaylist in SongsIn1970)
                     {
-                        songReport += songsPlaylist + "\n";
+                        report += songsPlaylist + "\n";
                     }
 
                     var NamesWith85Characters = from song in songs where song.NameOfSong.Length > 85 select song.NameOfSong;
-                    songReport += "\nHere are the list of songs that are longer than 85 characters: \n";
+                    report += "\nHere are the list of songs that are longer than 85 characters: \n";
                     foreach (string name in NamesWith85Characters)
                     {
-                        songReport += name + "\n";
+                        report += name + "\n";
                     }
 
                     var SongLongestLength = from song in songs orderby song.Time descending select song;
-                    songReport += "\nLongest Song: \n \n";
-                    songReport += SongLongestLength.First();
+                    report += "\nLongest Song: \n \n";
+                    report += SongLongestLength.First();
 
-                    write.Write(songReport);
+                    write.Write(report);
                     write.Close();
                 }
 
@@ -170,6 +171,7 @@ namespace FinalProjectMusicAnalyzer
             catch (Exception e)
             {
                 Console.WriteLine("Report file can't be opened/written");
+                Console.WriteLine(e.Message);
             }
 
             Console.ReadLine();
