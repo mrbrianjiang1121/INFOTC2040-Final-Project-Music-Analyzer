@@ -50,7 +50,7 @@ namespace FinalProjectMusicAnalyzer
             {
                 if (File.Exists(args[0]))
                 {
-                    StreamReader sr = new StreamReader(args[0]);
+                    StreamReader sr = new StreamReader(args[1]);
                     i = 0;
 
                     string line = sr.ReadLine();
@@ -80,6 +80,7 @@ namespace FinalProjectMusicAnalyzer
                         catch (Exception e)
                         {
                             Console.Write("Unable to read lines from the playlist data file");
+                            Console.WriteLine(e.Message);
                             break;
                         }
                         sr.Close();
@@ -95,6 +96,7 @@ namespace FinalProjectMusicAnalyzer
             catch (Exception e)
             {
                 Console.WriteLine("Unable to open the playlist data file...");
+                Console.WriteLine(e.Message);
             }
 
             try
@@ -178,4 +180,3 @@ namespace FinalProjectMusicAnalyzer
         }
     }
 }
-
